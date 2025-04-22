@@ -14,28 +14,192 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Post {
+model User {
+  id            Int            @id @default(autoincrement())
+  email         String         @unique
+  name          String
+  password      String
+  dob           DateTime
+  province      String
+  city          String
+  district      String
+  gender        Gender?
+  role          Role           @default(USER)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  education     Education[]
+  experience    Experience[]
+  notifications Notification[]
+  modules       userModule[]
+  applications  Application[]
+}
+
+enum Gender {
+  Male
+  Female
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Education {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  degree      String
+  institution String
+  startDate   DateTime
+  endDate     DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Experience {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  jobTitle    String
+  companyName String
+  startDate   DateTime
+  endDate     DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Notification {
   id        Int      @id @default(autoincrement())
+  userId    Int
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  title     String   @db.VarChar(255)
-  content   String?
-  published Boolean  @default(false)
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int
+
+  user User @relation(fields: [userId], references: [id])
 }
 
-model Profile {
-  id     Int     @id @default(autoincrement())
-  bio    String?
-  user   User    @relation(fields: [userId], references: [id])
-  userId Int     @unique
+model Module {
+  id         Int          @id @default(autoincrement())
+  name       String
+  creator    String
+  level      Level
+  price      Float
+  type       Type
+  userModule userModule[]
+  content    Content[]
+  quiz       Quiz[]
 }
 
-model User {
-  id      Int      @id @default(autoincrement())
-  email   String   @unique
-  name    String?
-  posts   Post[]
-  profile Profile?
+enum Level {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum Type {
+  Bootcamp
+  Course
+}
+
+model userModule {
+  id       Int    @id @default(autoincrement())
+  userId   Int
+  moduleId Int
+  progres  Int
+  user     User   @relation(fields: [userId], references: [id])
+  module   Module @relation(fields: [moduleId], references: [id])
+}
+
+model Content {
+  id        Int      @id @default(autoincrement())
+  moduleId  Int
+  title     String
+  content   String   @db.LongText
+  image     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  module Module @relation(fields: [moduleId], references: [id])
+}
+
+model Quiz {
+  id        Int      @id @default(autoincrement())
+  moduleId  Int
+  quizName  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  module    Module     @relation(fields: [moduleId], references: [id])
+  questions Question[]
+}
+
+model Question {
+  id        Int      @id @default(autoincrement())
+  quizId    Int
+  question  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  quiz    Quiz      @relation(fields: [quizId], references: [id])
+  Choices Choices[]
+}
+
+model Choices {
+  id         Int      @id @default(autoincrement())
+  questionId Int
+  choice     String
+  isCorrect  Boolean
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  question Question @relation(fields: [questionId], references: [id])
+}
+
+model Company {
+  id          Int       @id @default(autoincrement())
+  name        String
+  image       String
+  description String
+  address     String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  vacancies   vacancy[]
+}
+
+model vacancy {
+  id           Int           @id @default(autoincrement())
+  companyId    Int
+  title        String
+  description  String
+  companyName  String
+  location     String
+  salary       Float
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  company      Company       @relation(fields: [companyId], references: [id])
+  applications Application[]
+}
+
+model Application {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  vacancyId Int
+  status    Status   @default(PENDING)
+  cv        String
+  portfolio String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id])
+  vacancy vacancy @relation(fields: [vacancyId], references: [id])
+}
+
+enum Status {
+  PENDING
+  ACCEPTED
+  REJECTED
 }
