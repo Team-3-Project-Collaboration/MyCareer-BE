@@ -7,5 +7,4 @@ authRouter.post('/login', Auth.login);
 authRouter.get('/me', authMiddlewares, Auth.me);
 
 
-
 module.exports = authRouter;

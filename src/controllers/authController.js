@@ -78,7 +78,7 @@ class Auth {
         console.log("ini id", id)
 
         try {
-            const user = await userRepository.getUserById(id);
+            const user = await userRepository.findUserById(id);
 
             if (!user) {
                 return response({ res, code: 404, message: "User not found", data: null });
