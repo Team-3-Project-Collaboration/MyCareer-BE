@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -15,23 +14,24 @@ datasource db {
 }
 
 model User {
-  id            Int            @id @default(autoincrement())
-  email         String         @unique
+  id            Int              @id @default(autoincrement())
+  email         String           @unique
   name          String
   password      String
-  dob           DateTime
-  province      String
-  city          String
-  district      String
+  dob           DateTime?
+  province      String?
+  city          String?
+  district      String?
   gender        Gender?
-  role          Role           @default(USER)
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  role          Role?            @default(USER)
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
   education     Education[]
   experience    Experience[]
   notifications Notification[]
   modules       userModule[]
   applications  Application[]
+  purchases     ModulePurchase[]
 }
 
 enum Gender {
@@ -83,15 +83,16 @@ model Notification {
 }
 
 model Module {
-  id         Int          @id @default(autoincrement())
-  name       String
-  creator    String
-  level      Level
-  price      Float
-  type       Type
-  userModule userModule[]
-  content    Content[]
-  quiz       Quiz[]
+  id             Int              @id @default(autoincrement())
+  name           String
+  creator        String
+  level          Level
+  price          Float
+  type           Type
+  userModule     userModule[]
+  content        Content[]
+  quiz           Quiz[]
+  ModulePurchase ModulePurchase[]
 }
 
 enum Level {
@@ -202,4 +203,34 @@ enum Status {
   PENDING
   ACCEPTED
   REJECTED
+}
+
+model ModulePurchase {
+  id            Int            @id @default(autoincrement())
+  userId        Int
+  moduleId      Int
+  pricePaid     Float // harga saat transaksi (hindari berubah kalau diskon berubah)
+  purchasedAt   DateTime       @default(now())
+  paymentMethod Payment? // enum opsional
+  status        PurchaseStatus @default(SUCCESS)
+
+  user   User   @relation(fields: [userId], references: [id])
+  module Module @relation(fields: [moduleId], references: [id])
+
+  @@unique([userId, moduleId])
+  @@index([userId])
+  @@index([moduleId])
+}
+
+enum PurchaseStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  REFUNDED
+}
+
+enum Payment {
+  CREDIT_CARD
+  BANK_TRANSFER
+  EWALLET
 }
