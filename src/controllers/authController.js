@@ -17,9 +17,9 @@ class Auth {
                 return res.status(400).json({ message: 'User already exists' });
             }
             const newUser = await userRepository.createUser({ email, name, password: hashedPassword, dob, province, city, district, gender });
-            return response({ res, data: newUser, code: 201, message: 'User created successfullys' })
+            return response({ res, data: newUser, code: 201, message: 'User created successfully' })
         } catch (error) {
-            return res.status(500).json({ message: 'Internal server error', error: error.message });
+            return response({ res, code: 500, message: 'Internal server error', data: null, error: error.message });
         }
     }
 
@@ -51,8 +51,10 @@ class Auth {
             const token = jwt.sign(payload, process.env.JWT_SECRET);
             // const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "5h" });
 
-            res.status(200).json({
-                message: "Login successful",
+            return response({
+                res,
+                code: 200,
+                message: 'Login successful',
                 data: {
                     id: user.id,
                     name: user.username,
@@ -62,36 +64,29 @@ class Auth {
                     province: user.province,
                     district: user.district,
                     gender: user.gender,
-                    token: token
-                }
+                    token: token,
+                },
             });
 
         } catch (error) {
-            res.status(500).json({
-                message: error.message
-            });
+            return response({ res, code: 500, message: error, data: null });
         }
     }
 
     async me(req, res) {
         const { id } = req.userData;
+        console.log("ini id", id)
 
         try {
             const user = await userRepository.getUserById(id);
 
             if (!user) {
-                return res.status(404).json({ message: "User not found" });
+                return response({ res, code: 404, message: "User not found", data: null });
             }
+            return response({ res, data: user, code: 200, message: "Get current user success" })
 
-            return res.status(200).json({
-                message: "Get current user success",
-                data: user
-            });
         } catch (error) {
-            return res.status(500).json({
-                message: "Server error",
-                error: error.message
-            });
+            return response({ res, code: 500, message: error, data: null });
         }
     }
 }

@@ -20,6 +20,15 @@ class userRepository {
             throw new Error(error.message);
         }
     }
+
+    async getUserById(id) {
+        const user = await this.usersModel.findUnique({
+            where: {
+                id: id,
+            }
+        })
+        return user;
+    }
 }
 
 module.exports = new userRepository();
