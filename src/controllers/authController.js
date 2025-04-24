@@ -1,23 +1,23 @@
-const authRepository = require('../repository/authRepository')
+const userRepository = require('../repository/userRepository')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const response = require('../utils/response')
 
 console.log('AuthController loaded');
 
-class AuthController {
+class Auth {
     async register(req, res) {
         try {
             const { email, name, password, dob, province, city, district, gender } = req.body;
-            console.log(req.body);
             const hashedPassword = await bcrypt.hash(password, 10);
 
-            const existingUser = await authRepository.findUserByEmail(email);
+            const existingUser = await userRepository.findUserByEmail(email);
 
             if (existingUser) {
                 return res.status(400).json({ message: 'User already exists' });
             }
-            const newUser = await authRepository.createUser({ email, name, password: hashedPassword, dob, province, city, district, gender });
-            return res.status(201).json({ message: 'User created successfully', user: newUser });
+            const newUser = await userRepository.createUser({ email, name, password: hashedPassword, dob, province, city, district, gender });
+            return response({ res, data: newUser, code: 201, message: 'User created successfullys' })
         } catch (error) {
             return res.status(500).json({ message: 'Internal server error', error: error.message });
         }
@@ -26,7 +26,7 @@ class AuthController {
     async login(req, res) {
         try {
             const { email, password } = req.body;
-            const user = await authRepository.findUserByEmail(email);
+            const user = await userRepository.findUserByEmail(email);
 
             if (!user) {
                 return res.status(404).json({ message: "User not found" });
@@ -65,12 +65,14 @@ class AuthController {
                     token: token
                 }
             });
+
         } catch (error) {
             res.status(500).json({
                 message: error.message
             });
         }
     }
+
     async me(req, res) {
         const { id } = req.userData;
 
@@ -94,4 +96,4 @@ class AuthController {
     }
 }
 
-module.exports = new AuthController();
+module.exports = new Auth();
