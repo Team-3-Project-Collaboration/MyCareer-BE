@@ -2,6 +2,8 @@ const response = require('../utils/response')
 const userRepository = require('../repository/userRepository')
 const bcrypt = require('bcrypt');
 
+console.log('User controller loaded');
+
 class User {
 
     async getAllUser(req, res) {
@@ -17,7 +19,6 @@ class User {
 
     async updateUser(req, res) {
         try {
-            // const { id } = req.params;
             const { id } = req.userData;
 
             const allowed = ['email', 'name', 'password', 'dob',

@@ -1,5 +1,4 @@
 const prisma = require('../config/database');
-const response = require('../utils/response');
 
 class educationRepository {
     constructor() {
@@ -13,7 +12,6 @@ class educationRepository {
             });
             return newEducation;
         } catch (error) {
-            console.log("Error in createEducation:", error);
             throw new Error(error.message);
         }
 
@@ -32,7 +30,6 @@ class educationRepository {
     }
 
     async getMyEducation(id) {
-        console.log("ini darimana", id)
         const education = await this.educationModel.findMany({
             where: { userId: +id }
         });

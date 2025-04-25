@@ -1,7 +1,7 @@
 const response = require("../utils/response");
 const educationRepository = require("../repository/educationRepository");
-// const userRepository = require("../repository/userRepository");
-console.log('education loaded');
+
+console.log('Education Controller loaded');
 class education {
     async addEducation(req, res) {
         try {
@@ -57,17 +57,6 @@ class education {
             return response({ res, code: 500, message: "Internal server error", data: null, error: error.message });
         }
     }
-
-    // async updateEducation(res, req) {
-    //     try {
-    //         const updates = {};
-    //         const { id } = req.body;
-    //         const updated = await educationRepository.updateEducation(id, updates)
-    //         return response({ res, code: 200, message: "Get my education success", data: updated });
-    //     } catch (error) {
-    //         return response({ res, code: 500, message: 'Internal server error', data: null, error: error.message });
-    //     }
-    // }
 
     async updateEducation(req, res) {
         try {
