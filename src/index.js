@@ -8,6 +8,7 @@ const port = process.env.PORT
 // routes
 const authRouter = require('./routes/authRouter')
 const userRouter = require('./routes/userRoutes')
+const educationRouter = require('./routes/educationRoutes')
 
 
 
@@ -15,6 +16,7 @@ app.use(express.json());
 
 app.use('/auth', authRouter)
 app.use('/user', userRouter)
+app.use('/education', educationRouter)
 
 app.listen(port, () => {
     console.log(`Listen on http://localhost:${port}`)

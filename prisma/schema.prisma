@@ -49,8 +49,8 @@ model Education {
   userId      Int
   degree      String
   institution String
-  startDate   DateTime
-  endDate     DateTime
+  startDate   DateTime @db.Date
+  endDate     DateTime @db.Date
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
