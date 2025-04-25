@@ -2,6 +2,7 @@ const response = require("../utils/response");
 const experienceRepository = require("../repository/experienceRepository");
 
 console.log('Experience Controller loaded');
+console.log("success")
 class experience {
     async addExperience(req, res) {
         try {
