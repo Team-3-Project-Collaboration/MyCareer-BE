@@ -14,10 +14,29 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y sshpass
 
       - name: Deploy to Server
+        env:
+          SSH_PASS: ${{ secrets.VPS_PASSWORD }}
+          SSH_USER: ${{ secrets.VPS_USERNAME }}
+          SSH_HOST: ${{ secrets.VPS_HOSTNAME }}
+          SSH_PORT: ${{ secrets.VPS_PORT }}
         run: |
-          sshpass -p "${{ secrets.VPS_PASSWORD }}" ssh -o StrictHostKeyChecking=no -p ${{ secrets.VPS_PORT }} ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOSTNAME }} << EOF
+          echo "Starting deployment to server..."
+
+          sshpass -p "$SSH_PASS" ssh -o StrictHostKeyChecking=no -p $SSH_PORT $SSH_USER@$SSH_HOST << 'EOF'
+            set -e  # jika ada error, langsung berhenti (supaya aman)
+
+            echo "Navigating to app directory..."
             cd app/MyCareer-BE
-            git pull origin main
+
+            echo "Resetting local changes..."
+            git fetch --all
+            git reset --hard origin/main
+
+            echo "Installing dependencies..."
             npm install
+
+            echo "Restarting PM2 process..."
             pm2 restart all
+
+            echo "Deployment finished successfully!"
           EOF
