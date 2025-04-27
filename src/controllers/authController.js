@@ -18,7 +18,7 @@ class Auth {
             const newUser = await userRepository.createUser({ email, name, password: hashedPassword, dob, province, city, district, gender, role });
             return response({ res, data: newUser, code: 201, message: 'User created successfully' })
         } catch (error) {
-            return response({ res, code: 500, message: 'Internal server error', data: null, error: error.message });
+            return response({ res, code: 500, message: error.message, data: null });
         }
     }
 
