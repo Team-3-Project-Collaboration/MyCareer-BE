@@ -1,7 +1,6 @@
 const response = require("../utils/response");
 const educationRepository = require("../repository/educationRepository");
 
-console.log('Education Controller loaded');
 class education {
     async addEducation(req, res) {
         try {

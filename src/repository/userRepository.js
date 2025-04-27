@@ -1,6 +1,5 @@
 const prisma = require('../config/database');
 
-console.log('User respository loaded');
 class userRepository {
     constructor() {
         this.usersModel = prisma.user;

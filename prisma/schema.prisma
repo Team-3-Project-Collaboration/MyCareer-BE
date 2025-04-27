@@ -99,6 +99,7 @@ enum Level {
   BEGINNER
   INTERMEDIATE
   ADVANCED
+  ALL_LEVEL
 }
 
 enum Type {
@@ -207,11 +208,12 @@ enum Status {
 
 model ModulePurchase {
   id            Int            @id @default(autoincrement())
+  idTransaction String?
   userId        Int
   moduleId      Int
-  pricePaid     Float // harga saat transaksi (hindari berubah kalau diskon berubah)
+  pricePaid     Float
   purchasedAt   DateTime       @default(now())
-  paymentMethod Payment? // enum opsional
+  paymentMethod Payment?
   status        PurchaseStatus @default(SUCCESS)
 
   user   User   @relation(fields: [userId], references: [id])
@@ -233,4 +235,11 @@ enum Payment {
   CREDIT_CARD
   BANK_TRANSFER
   EWALLET
+}
+
+model voucher {
+  id        Int      @id @default(autoincrement())
+  code      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

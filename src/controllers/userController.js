@@ -2,8 +2,6 @@ const response = require('../utils/response')
 const userRepository = require('../repository/userRepository')
 const bcrypt = require('bcrypt');
 
-console.log('User controller loaded');
-
 class User {
 
     async getAllUser(req, res) {

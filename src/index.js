@@ -10,6 +10,7 @@ const authRouter = require('./routes/authRouter')
 const userRouter = require('./routes/userRoutes')
 const educationRouter = require('./routes/educationRoutes')
 const experienceRouter = require('./routes/experienceRouter')
+const moduleRouter = require('./routes/moduleRoutes')
 
 
 
@@ -19,6 +20,8 @@ app.use('/auth', authRouter)
 app.use('/user', userRouter)
 app.use('/education', educationRouter)
 app.use('/experience', experienceRouter)
+app.use('/module', moduleRouter)
+
 
 
 app.listen(port, () => {

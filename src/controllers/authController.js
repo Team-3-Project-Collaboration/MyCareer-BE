@@ -3,7 +3,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const response = require('../utils/response')
 
-console.log('AuthController loaded');
 
 class Auth {
     async register(req, res) {
