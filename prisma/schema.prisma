@@ -14,25 +14,61 @@ datasource db {
 }
 
 model User {
-  id            Int              @id @default(autoincrement())
-  email         String           @unique
-  name          String
-  password      String
-  dob           DateTime?
-  province      String?
-  city          String?
-  district      String?
-  gender        Gender?
-  role          Role?            @default(USER)
-  createdAt     DateTime         @default(now())
-  updatedAt     DateTime         @updatedAt
-  education     Education[]
-  experience    Experience[]
-  notifications Notification[]
-  modules       userModule[]
-  applications  Application[]
-  purchases     ModulePurchase[]
-  company       Company?
+  id             Int                @id @default(autoincrement())
+  email          String             @unique
+  name           String
+  password       String
+  dob            DateTime?
+  province       String?
+  city           String?
+  district       String?
+  gender         Gender?
+  role           Role?              @default(USER)
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  education      Education[]
+  experience     Experience[]
+  notifications  Notification[]
+  modules        userModule[]
+  applications   Application[]
+  purchases      ModulePurchase[]
+  company        Company?
+  mentorProfile  MentorProfile?
+  bookingsAsUser MentoringBooking[] @relation("UserBookings")
+}
+
+model MentorProfile {
+  id               Int                @id @default(autoincrement())
+  userId           Int                @unique
+  bio              String?
+  expertise        String?
+  pricePerHour     Float
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  user             User               @relation(fields: [userId], references: [id])
+  bookingsAsMentor MentoringBooking[] @relation("MentorBookings")
+}
+
+model MentoringBooking {
+  id              Int                    @id @default(autoincrement())
+  idBook          String
+  userId          Int
+  mentorProfileId Int
+  scheduleDate    DateTime
+  durationHours   Int
+  totalPayment    Float
+  paymentStatus   PaymentStatusMentoring @default(PENDING)
+  paymentMethod   Payment?
+  createdAt       DateTime               @default(now())
+  updatedAt       DateTime               @updatedAt
+  user            User                   @relation("UserBookings", fields: [userId], references: [id])
+  mentorProfile   MentorProfile          @relation("MentorBookings", fields: [mentorProfileId], references: [id])
+}
+
+enum PaymentStatusMentoring {
+  PENDING
+  PAID
+  CANCELLED
 }
 
 enum Gender {
@@ -56,8 +92,7 @@ model Education {
   endDate     DateTime @db.Date
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
-  user User @relation(fields: [userId], references: [id])
+  user        User     @relation(fields: [userId], references: [id])
 }
 
 model Experience {
@@ -69,8 +104,7 @@ model Experience {
   endDate     DateTime
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
-  user User @relation(fields: [userId], references: [id])
+  user        User     @relation(fields: [userId], references: [id])
 }
 
 model Notification {
@@ -174,7 +208,7 @@ model Company {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  user      User      @relation(fields: [userId], references: [id]) // ← Ini relasinya
+  user      User      @relation(fields: [userId], references: [id])
   vacancies vacancy[]
 }
 

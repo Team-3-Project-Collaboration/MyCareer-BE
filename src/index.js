@@ -16,6 +16,8 @@ const quizRouter = require('./routes/quizRouter')
 const companyRouter = require('./routes/companyRoutes')
 const vacancyRouter = require('./routes/vacancyRoutes')
 const applicationRoutes = require('./routes/applicationRoutes')
+const bookRoutes = require('./routes/bookRoutes')
+const mentorRoutes = require('./routes/mentorRoutes')
 
 
 
@@ -32,6 +34,10 @@ app.use('/quiz', quizRouter)
 app.use('/company', companyRouter)
 app.use('/vacancy', vacancyRouter)
 app.use('/applications', applicationRoutes)
+app.use('/mentor', mentorRoutes)
+app.use('/book', bookRoutes)
+
+
 
 
 

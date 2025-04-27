@@ -1,15 +1,14 @@
 const response = require("../utils/response");
 const applicationRepository = require("../repository/applicationRepository");
-
+console.log("appicarionloaded")
 class application {
     async addApplication(req, res) {
         try {
             const { id } = req.userData;
-            const { vacancyId } = req.params;
-            const { cv, portfolio } = req.body;
+            const { vacancyId, cv, portfolio } = req.body;
 
             const newApplication = await applicationRepository.createApplication({
-                userId: id,
+                userId: +id,
                 vacancyId,
                 cv,
                 portfolio,
@@ -31,7 +30,7 @@ class application {
 
             return response({ res, code: 200, message: 'Get all applications success', data: applications });
         } catch (error) {
-            return response({ res, code: 500, message: 'Internal server error', data: null, error: error.message });
+            return response({ res, code: 500, message: error.message, data: null });
         }
     }
 
@@ -46,18 +45,19 @@ class application {
 
             return response({ res, code: 200, message: 'Get application by id success', data: application });
         } catch (error) {
-            return response({ res, code: 500, message: 'Internal server error', data: null, error: error.message });
+            return response({ res, code: 500, message: error.message, data: null });
         }
     }
 
     async getMyApplications(req, res) {
+        console.log("haloo")
         try {
             const { id } = req.userData;
             const applications = await applicationRepository.getApplicationsByUserId(id);
 
             return response({ res, code: 200, message: 'Get my applications success', data: applications });
         } catch (error) {
-            return response({ res, code: 500, message: 'Internal server error', data: null, error: error.message });
+            return response({ res, code: 500, message: error.message, data: null });
         }
     }
 
@@ -69,8 +69,8 @@ class application {
             const updated = await applicationRepository.updateApplication(id, updates);
 
             return response({ res, code: 200, message: 'Application updated successfully', data: updated });
-        } catch (err) {
-            return response({ res, code: 400, message: err.message || 'Internal server error', data: null });
+        } catch (error) {
+            return response({ res, code: 400, message: error.message, data: null });
         }
     }
 
@@ -85,7 +85,7 @@ class application {
 
             return response({ res, code: 200, message: 'Application deleted successfully', data: deleted });
         } catch (error) {
-            return response({ res, code: 500, message: 'Internal server error', data: null, error: error.message });
+            return response({ res, code: 500, message: error.message, data: null });
         }
     }
 }

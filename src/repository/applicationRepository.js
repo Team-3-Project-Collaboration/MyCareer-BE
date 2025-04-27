@@ -9,12 +9,16 @@ class applicationRepository {
         try {
             const newApplication = await this.applicationModel.create({
                 data: {
-                    userId,
-                    vacancyId,
                     cv,
                     portfolio,
                     status: 'PENDING',
-                },
+                    user: {
+                        connect: { id: userId }
+                    },
+                    vacancy: {
+                        connect: { id: vacancyId }
+                    }
+                }
             });
             return newApplication;
         } catch (error) {
