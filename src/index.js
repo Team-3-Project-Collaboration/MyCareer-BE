@@ -16,6 +16,8 @@ const quizRouter = require('./routes/quizRouter')
 const companyRouter = require('./routes/companyRoutes')
 const vacancyRouter = require('./routes/vacancyRoutes')
 console.log("hallo wordl")
+console.log("hallo testt CICD")
+
 
 
 
