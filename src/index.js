@@ -11,6 +11,9 @@ const userRouter = require('./routes/userRoutes')
 const educationRouter = require('./routes/educationRoutes')
 const experienceRouter = require('./routes/experienceRouter')
 const moduleRouter = require('./routes/moduleRoutes')
+const quizRouter = require('./routes/quizRouter')
+const companyRouter = require('./routes/companyRoutes')
+const vacancyRouter = require('./routes/vacancyRoutes')
 
 
 
@@ -21,6 +24,12 @@ app.use('/user', userRouter)
 app.use('/education', educationRouter)
 app.use('/experience', experienceRouter)
 app.use('/module', moduleRouter)
+app.use('/quiz', quizRouter)
+app.use('/company', companyRouter)
+app.use('/vacancy', vacancyRouter)
+
+
+
 
 
 

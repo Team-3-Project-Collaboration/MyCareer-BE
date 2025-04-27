@@ -5,10 +5,10 @@ class userRepository {
         this.usersModel = prisma.user;
     }
 
-    async createUser({ email, name, password, dob, province, city, district, gender }) {
+    async createUser({ email, name, password, dob, province, city, district, gender, role }) {
         try {
             const newUser = await this.usersModel.create({
-                data: { email, name, password, dob: new Date(dob), province, city, district, gender }
+                data: { email, name, password, dob: new Date(dob), province, city, district, gender, role }
             });
             return newUser;
         } catch (error) {

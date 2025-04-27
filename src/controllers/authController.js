@@ -7,7 +7,7 @@ const response = require('../utils/response')
 class Auth {
     async register(req, res) {
         try {
-            const { email, name, password, dob, province, city, district, gender } = req.body;
+            const { email, name, password, dob, province, city, district, gender, role } = req.body;
             const hashedPassword = await bcrypt.hash(password, 10);
 
             const existingUser = await userRepository.findUserByEmail(email);
@@ -15,7 +15,7 @@ class Auth {
             if (existingUser) {
                 return res.status(400).json({ message: 'User already exists' });
             }
-            const newUser = await userRepository.createUser({ email, name, password: hashedPassword, dob, province, city, district, gender });
+            const newUser = await userRepository.createUser({ email, name, password: hashedPassword, dob, province, city, district, gender, role });
             return response({ res, data: newUser, code: 201, message: 'User created successfully' })
         } catch (error) {
             return response({ res, code: 500, message: 'Internal server error', data: null, error: error.message });
