@@ -3,7 +3,7 @@ const app = express()
 const cors = require('cors');
 const { config } = require('dotenv');
 config();
-const port = process.env.PORT
+const port = process.env.PORT || 3000
 
 
 // routes
@@ -15,8 +15,7 @@ const moduleRouter = require('./routes/moduleRoutes')
 const quizRouter = require('./routes/quizRouter')
 const companyRouter = require('./routes/companyRoutes')
 const vacancyRouter = require('./routes/vacancyRoutes')
-console.log("hallo wordl")
-console.log("hallo testt CICD")
+const applicationRoutes = require('./routes/applicationRoutes')
 
 
 
@@ -32,6 +31,8 @@ app.use('/module', moduleRouter)
 app.use('/quiz', quizRouter)
 app.use('/company', companyRouter)
 app.use('/vacancy', vacancyRouter)
+app.use('/applications', applicationRoutes)
+
 
 
 
